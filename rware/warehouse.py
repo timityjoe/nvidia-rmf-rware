@@ -706,7 +706,9 @@ class Warehouse(gym.Env):
     def step(
         self, actions: List[Action]
     ) -> Tuple[List[np.ndarray], List[float], List[bool], Dict]:
-        assert len(actions) == len(self.agents)
+        
+        # Mod by Tim: turn off for now
+        # assert len(actions) == len(self.agents)
 
         for agent, action in zip(self.agents, actions):
             if self.msg_bits > 0:
@@ -870,11 +872,11 @@ if __name__ == "__main__":
     from tqdm import tqdm
 
     time.sleep(2)
-    # env.render()
-    # env.step(18 * [Action.LOAD] + 2 * [Action.NOOP])
+    env.render()
+    env.step(18 * [Action.TOGGLE_LOAD] + 2 * [Action.NOOP])
 
     for _ in tqdm(range(1000000)):
-        # time.sleep(2)
-        # env.render()
+        time.sleep(2)
+        env.render()
         actions = env.action_space.sample()
         env.step(actions)
