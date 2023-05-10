@@ -890,7 +890,8 @@ if __name__ == "__main__":
     # time.sleep(2)
     env.render()
 
-    logger.info(f"Action.TOGGLE_LOAD:{Action.TOGGLE_LOAD}, Action.NOOP:{Action.NOOP}")
+    logger.info("Start Time:")
+    # logger.info(f"Action.TOGGLE_LOAD:{Action.TOGGLE_LOAD}, Action.NOOP:{Action.NOOP}")
     # env.step(18 * [Action.TOGGLE_LOAD] + 2 * [Action.NOOP])
 
     for _ in tqdm(range(1000000)):
@@ -901,3 +902,5 @@ if __name__ == "__main__":
         # logger.info(f"len(actions):{len(actions)}")
         # logger.info(f"actions:{actions}")
         env.step(actions)
+
+    logger.info("End Time:")
