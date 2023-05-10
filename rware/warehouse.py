@@ -899,8 +899,9 @@ if __name__ == "__main__":
         env.render()
         actions = env.action_space.sample()
         
-        # logger.info(f"len(actions):{len(actions)}")
-        # logger.info(f"actions:{actions}")
-        env.step(actions)
+        n_obs, reward, done, info = env.step(actions)
+        # logger.info(f"n_obs:{n_obs}, reward:{reward}, done:{done}, info:{info}")
+        # logger.info(f"done:{done}, reward:{reward}")
 
     logger.info("End Time:")
+    env.close()
