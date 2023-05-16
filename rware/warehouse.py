@@ -13,6 +13,9 @@ from typing import List, Tuple, Optional, Dict
 
 import networkx as nx
 
+# Mod by Tim:
+from loguru import logger
+
 _AXIS_Z = 0
 _AXIS_Y = 1
 _AXIS_X = 2
@@ -707,15 +710,28 @@ class Warehouse(gym.Env):
         self, actions: List[Action]
     ) -> Tuple[List[np.ndarray], List[float], List[bool], Dict]:
         
-        # Mod by Tim: turn off for now
-        # assert len(actions) == len(self.agents)
+        # Mod by Tim: turn off assert for now
+        if (len(actions) != len(self.agents)):
+            logger.info(f"len(actions):{len(actions)}, len(self.agents):{len(self.agents)}")
+            assert len(actions) == len(self.agents)
 
         for agent, action in zip(self.agents, actions):
+
+            # logger.info(f"self.agents:{self.agents}")
+            # logger.info(f"actions:{actions}")
+            # logger.info(f"action:{action}")
+            # logger.info(f"action.value:{action.value}")
+            # logger.info(f"actions[1:]:{actions[1:]}")
+
             if self.msg_bits > 0:
                 agent.req_action = Action(action[0])
                 agent.message[:] = action[1:]
+                # agent.req_action = action.value
+                # agent.message[:] = str(action.value)
             else:
                 agent.req_action = Action(action)
+        # logger.info('\n\n')
+
 
         # # stationary agents will certainly stay where they are
         # stationary_agents = [agent for agent in self.agents if agent.action != Action.FORWARD]
@@ -871,12 +887,21 @@ if __name__ == "__main__":
     import time
     from tqdm import tqdm
 
-    time.sleep(2)
+    # time.sleep(2)
     env.render()
-    env.step(18 * [Action.TOGGLE_LOAD] + 2 * [Action.NOOP])
+
+    logger.info("Start Time:")
+    # logger.info(f"Action.TOGGLE_LOAD:{Action.TOGGLE_LOAD}, Action.NOOP:{Action.NOOP}")
+    # env.step(18 * [Action.TOGGLE_LOAD] + 2 * [Action.NOOP])
 
     for _ in tqdm(range(1000000)):
-        time.sleep(2)
+        # time.sleep(2)
         env.render()
         actions = env.action_space.sample()
-        env.step(actions)
+        
+        n_obs, reward, done, info = env.step(actions)
+        # logger.info(f"n_obs:{n_obs}, reward:{reward}, done:{done}, info:{info}")
+        # logger.info(f"done:{done}, reward:{reward}")
+
+    logger.info("End Time:")
+    env.close()

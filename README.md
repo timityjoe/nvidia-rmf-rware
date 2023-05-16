@@ -8,6 +8,7 @@
 
 <h1>Table of Contents</h1>
 
+- [Installation and Running](#installation-and-running)
 - [Environment Description](#environment-description)
   - [What does it look like?](#what-does-it-look-like)
   - [Action Space](#action-space)
@@ -17,10 +18,28 @@
 - [Environment Parameters](#environment-parameters)
   - [Naming Scheme](#naming-scheme)
   - [Custom layout](#custom-layout)
-- [Installation](#installation)
 - [Getting Started](#getting-started)
 - [Please Cite](#please-cite)
 
+
+# Installation and Running
+
+Installation:
+```shell
+$ pipenv shell
+$ pip install -r requirements.txt 
+$ python3 -m rware.warehouse
+```
+Assuming you have Python3 (preferably on a virtual environment: venv or Anaconda) installed, you can use PyPI:
+```sh
+pip install rware
+```
+If you prefer to have the code available and be able to edit it, you can use Git to download and install it:
+```sh
+git clone git@github.com:timityjoe/nvidia-rmf-rware.git
+cd nvidia-rmf-rware
+pip install -e .
+```
 
 # Environment Description
 
@@ -113,20 +132,6 @@ This will transform "X"s to shelves and "G"s to goal locations with a result lik
 
 
 A detailed explanation of all parameters can be found [here](https://github.com/semitable/robotic-warehouse/blob/4307b1fe3afa26de4ca4003fd04ab1319879832a/robotic_warehouse/warehouse.py#L132)
-
-# Installation
-
-Assuming you have Python3 (preferably on a virtual environment: venv or Anaconda) installed, you can use PyPI:
-```sh
-pip install rware
-```
-
-If you prefer to have the code available and be able to edit it, you can use Git to download and install it:
-```sh
-git clone git@github.com:uoe-agents/robotic-warehouse.git
-cd robotic-warehouse
-pip install -e .
-```
 
 # Getting Started
 

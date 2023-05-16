@@ -1,0 +1,95 @@
+
+env = Warehouse(9, 8, 3, 10, 3, 1, 5, None, None, RewardType.GLOBAL)
+
+
+class Warehouse(gym.Env):
+
+    metadata = {"render.modes": ["human", "rgb_array"]}
+
+    def __init__(
+        self,
+        shelf_columns: int,
+        column_height: int,
+        shelf_rows: int,
+        n_agents: int,
+        msg_bits: int,
+        sensor_range: int,
+        request_queue_size: int,
+        max_inactivity_steps: Optional[int],
+        max_steps: Optional[int],
+        reward_type: RewardType,
+        layout: str = None,
+        observation_type: ObserationType=ObserationType.FLATTENED,
+        image_observation_layers: List[ImageLayer]=[
+            ImageLayer.SHELVES,
+            ImageLayer.REQUESTS,
+            ImageLayer.AGENTS,
+            ImageLayer.GOALS,
+            ImageLayer.ACCESSIBLE
+        ],
+        image_observation_directional: bool=True,
+        normalised_coordinates: bool=False,
+    ):
+        """The robotic warehouse environment
+
+        Creates a grid world where multiple agents (robots)
+        are supposed to collect shelfs, bring them to a goal
+        and then return them.
+        .. note:
+            The grid looks like this:
+
+            shelf
+            columns
+                vv
+            ----------
+            -XX-XX-XX-        ^
+            -XX-XX-XX-  Column Height
+            -XX-XX-XX-        v
+            ----------
+            -XX----XX-   <\
+            -XX----XX-   <- Shelf Rows
+            -XX----XX-   </
+            ----------
+            ----GG----
+
+            G: is the goal positions where agents are rewarded if
+            they bring the correct shelfs.
+
+            The final grid size will be
+            height: (column_height + 1) * shelf_rows + 2
+            width: (2 + 1) * shelf_columns + 1
+
+            The bottom-middle column will be removed to allow for
+            robot queuing next to the goal locations
+
+        :param shelf_columns: Number of columns in the warehouse
+        :type shelf_columns: int
+        :param column_height: Column height in the warehouse
+        :type column_height: int
+        :param shelf_rows: Number of columns in the warehouse
+        :type shelf_rows: int
+        :param n_agents: Number of spawned and controlled agents
+        :type n_agents: int
+        :param msg_bits: Number of communication bits for each agent
+        :type msg_bits: int
+        :param sensor_range: Range of each agents observation
+        :type sensor_range: int
+        :param request_queue_size: How many shelfs are simultaneously requested
+        :type request_queue_size: int
+        :param max_inactivity: Number of steps without a delivered shelf until environment finishes
+        :type max_inactivity: Optional[int]
+        :param reward_type: Specifies if agents are rewarded individually or globally
+        :type reward_type: RewardType
+        :param layout: A string for a custom warehouse layout. X are shelve locations, dots are corridors, and g are the goal locations. Ignores shelf_columns, shelf_height and shelf_rows when used.
+        :type layout: str
+        :param observation_type: Specifies type of observations
+        :param image_observation_layers: Specifies types of layers observed if image-observations
+            are used
+        :type image_observation_layers: List[ImageLayer]
+        :param image_observation_directional: Specifies whether image observations should be
+            rotated to be directional (agent perspective) if image-observations are used
+        :type image_observation_directional: bool
+        :param normalised_coordinates: Specifies whether absolute coordinates should be normalised
+            with respect to total warehouse size
+        :type normalised_coordinates: bool
+        """
