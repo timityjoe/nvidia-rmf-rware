@@ -240,6 +240,8 @@ class Warehouse(gym.Env):
 
         self.goals: List[Tuple[int, int]] = []
 
+        # if not layout:
+        print(f"layout:{layout}")
         if not layout:
             self._make_layout_from_params(shelf_columns, shelf_rows, column_height)
         else:
@@ -882,7 +884,35 @@ class Warehouse(gym.Env):
     
 
 if __name__ == "__main__":
-    env = Warehouse(9, 8, 3, 10, 3, 1, 5, None, None, RewardType.GLOBAL)
+
+    # Orig config
+    # shelf_columns = 9
+    # column_height = 8
+    # shelf_rows = 3
+    # max_steps = 500
+    # reward_type = RewardType.GLOBAL
+
+    # Mod config
+    shelf_columns = 3   # Only odd numbers supported
+    column_height = 4
+    shelf_rows = 1
+    num_agents = 10
+    max_steps = 500
+    # reward_type = RewardType.INDIVIDUAL
+    reward_type = RewardType.GLOBAL
+    layout = ''
+    observation_type = ObserationType.IMAGE
+
+    msg_bits = 3
+    sensor_range = 1
+    request_queue_size = 5
+    max_inactivity_steps = None
+
+    env = Warehouse(shelf_columns, column_height, shelf_rows, 
+                        num_agents, msg_bits, sensor_range, request_queue_size, 
+                        max_inactivity_steps, max_steps, reward_type, layout, observation_type)
+
+    # env = Warehouse(9, 8, 3, 10, 3, 1, 5, None, None, RewardType.GLOBAL)
     env.reset()
     import time
     from tqdm import tqdm
@@ -894,7 +924,9 @@ if __name__ == "__main__":
     # logger.info(f"Action.TOGGLE_LOAD:{Action.TOGGLE_LOAD}, Action.NOOP:{Action.NOOP}")
     # env.step(18 * [Action.TOGGLE_LOAD] + 2 * [Action.NOOP])
 
-    for _ in tqdm(range(1000000)):
+    # Mod by Tim: Drop a few Zeros...
+    # for _ in tqdm(range(1000000)):
+    for _ in tqdm(range(10000)):
         # time.sleep(2)
         env.render()
         actions = env.action_space.sample()

@@ -4,3 +4,4 @@ gym
 networkx
 tqdm
 six
+pytest
